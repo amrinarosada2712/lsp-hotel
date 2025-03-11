@@ -9,7 +9,7 @@ $rooms = [
 $selected_room = $_POST['tipeKamar'] ?? $rooms[$id][0];
 $selected_price = array_column($rooms, 1, 0)[$selected_room];
 $breakfast = isset($_POST['breakfast']);
-$durasi = $_POST['durasi'] ?? 1;
+$durasi = $_POST['durasi'] ?? 0;
 $total_bayar = 0;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="card-body">
                 <form method="POST">
                     <!-- Input Nama -->
-                    <input type="text" class="form-control mb-3" name="nama" placeholder="Nama Pemesan" value="<?= htmlspecialchars($_POST['nama'] ?? '') ?>" required>
+                    <input type="text" class="form-control mb-3" name="nama" placeholder="Nama Pemesan" value="<?= $_POST['nama'] ?? '' ?>" required>
                     
                     <!-- Jenis Kelamin -->
                     <div class="mb-3">
@@ -45,15 +45,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
 
                     <!-- Nomor Identitas -->
-                    <input type="text" class="form-control mb-3" name="identitas" placeholder="Nomor Identitas" value="<?= htmlspecialchars($_POST['identitas'] ?? '') ?>" required>
+                    <input type="text" class="form-control mb-3" name="identitas" placeholder="Nomor Identitas" value="<?= $_POST['identitas'] ?? '' ?>" required>
 
                     <!-- Tipe Kamar -->
                     <select class="form-select mb-3" name="tipeKamar" onchange="this.form.submit()">
-                        <?php foreach ($rooms as $room): ?>
+                        <?php foreach ($rooms as $room){ ?>
                             <option value="<?= $room[0] ?>" <?= ($room[0] === $selected_room) ? 'selected' : '' ?>>
                                 <?= $room[0] ?>
                             </option>
-                        <?php endforeach; ?>
+                        <?php } ?>
                     </select>
 
                     <!-- Harga Kamar -->
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input type="date" class="form-control mb-3" name="tanggal" value="<?= $_POST['tanggal'] ?? '' ?>" required>
 
                     <!-- Durasi Menginap -->
-                    <input type="number" class="form-control mb-3" name="durasi" placeholder="Durasi Menginap" value="<?= htmlspecialchars($durasi) ?>" required>
+                    <input type="number" class="form-control mb-3" name="durasi" placeholder="Durasi Menginap" value="<?= $durasi ?>" required>
 
                     <!-- Checkbox Breakfast -->
                     <div class="mb-3">
