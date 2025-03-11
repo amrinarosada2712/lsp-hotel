@@ -73,6 +73,15 @@ $rooms = [
     </div>
 
     <div class="container mt-5">
+        <section id="tentang">
+            <h2 class="text-center">Tentang Kami</h2>
+            <p class="text-center">Hotel Kami adalah tempat terbaik untuk menginap dengan layanan berkualitas dan fasilitas modern. 
+            Lokasi kami berada di Jl. Raya No. 456, Jakarta. 
+            Hubungi kami di <strong>0812-9876-5432</strong> atau email ke <strong>info@hotelkami.com</strong>.</p>
+        </section>
+    </div>
+
+    <div class="container mt-5">
         <section id="produk">
             <h2 class="text-center">Jenis Kamar</h2>
             <div class="row">
@@ -89,11 +98,7 @@ $rooms = [
         </section>
     </div>
 
-    <footer id="tentang" class="bg-dark text-white text-center py-3 mt-5">
-        <h2 class="text-center">Tentang Kami</h2>
-        <p class="text-center">Hotel Kami adalah tempat terbaik untuk menginap dengan layanan berkualitas dan fasilitas modern. 
-        Lokasi kami berada di Jl. Raya No. 456, Jakarta. 
-        Hubungi kami di <strong>0812-9876-5432</strong> atau email ke <strong>info@hotelkami.com</strong>.</p>
+    <footer class="bg-dark text-white text-center py-3 mt-5">
         <p>&copy; 2025 Hotel Kami. All Rights Reserved.</p>
     </footer>
 

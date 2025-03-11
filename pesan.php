@@ -1,11 +1,25 @@
 <?php
 $id = $_GET['id'];
 $rooms = [
-    ["Standar", 500000, "standar.jpg"],
-    ["Deluxe", 600000, "deluxe.jpg"],
-    ["Executive", 700000, "executive.jpg"]
+    ["Standar", 500000],
+    ["Deluxe", 600000],
+    ["Executive", 700000]
 ];
+
+$selected_room = $_POST['tipeKamar'] ?? $rooms[$id][0];
+$selected_price = array_column($rooms, 1, 0)[$selected_room];
+$breakfast = isset($_POST['breakfast']);
+$durasi = $_POST['durasi'] ?? 1;
+$total_bayar = 0;
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $breakfast_cost = $breakfast ? 80000 * $durasi : 0;
+    $total_room_price = $selected_price * $durasi;
+    $discount = ($durasi >= 3) ? 0.1 * $total_room_price : 0;
+    $total_bayar = ($total_room_price - $discount) + $breakfast_cost;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -17,71 +31,55 @@ $rooms = [
 <body>
     <div class="container mt-5">
         <div class="card">
-            <div class="card-header bg-primary text-white text-center">
-                <h5>Form Pemesanan</h5>
-            </div>
+            <div class="card-header bg-primary text-white text-center"><h5>Form Pemesanan</h5></div>
             <div class="card-body">
-                <form>
-                    <div class="mb-3">
-                        <label for="nama" class="form-label">Nama Pemesan</label>
-                        <input type="text" class="form-control" id="nama" required>
-                    </div>
+                <form method="POST">
+                    <!-- Input Nama -->
+                    <input type="text" class="form-control mb-3" name="nama" placeholder="Nama Pemesan" value="<?= htmlspecialchars($_POST['nama'] ?? '') ?>" required>
+                    
+                    <!-- Jenis Kelamin -->
                     <div class="mb-3">
                         <label class="form-label">Jenis Kelamin</label><br>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="gender" value="Laki-laki">
-                            <label class="form-check-label" for="laki">Laki-laki</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="gender" value="Perempuan">
-                            <label class="form-check-label" for="perempuan">Perempuan</label>
-                        </div>
+                        <input class="form-check-input" type="radio" name="gender" value="Laki-laki" <?= (isset($_POST['gender']) && $_POST['gender'] === 'Laki-laki') ? 'checked' : '' ?>> Laki-laki
+                        <input class="form-check-input ms-3" type="radio" name="gender" value="Perempuan" <?= (isset($_POST['gender']) && $_POST['gender'] === 'Perempuan') ? 'checked' : '' ?>> Perempuan
                     </div>
+
+                    <!-- Nomor Identitas -->
+                    <input type="text" class="form-control mb-3" name="identitas" placeholder="Nomor Identitas" value="<?= htmlspecialchars($_POST['identitas'] ?? '') ?>" required>
+
+                    <!-- Tipe Kamar -->
+                    <select class="form-select mb-3" name="tipeKamar" onchange="this.form.submit()">
+                        <?php foreach ($rooms as $room): ?>
+                            <option value="<?= $room[0] ?>" <?= ($room[0] === $selected_room) ? 'selected' : '' ?>>
+                                <?= $room[0] ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <!-- Harga Kamar -->
+                    <input type="text" class="form-control mb-3" name="harga" value="<?= $selected_price ?>" readonly>
+
+                    <!-- Tanggal Pemesanan -->
+                    <input type="date" class="form-control mb-3" name="tanggal" value="<?= $_POST['tanggal'] ?? '' ?>" required>
+
+                    <!-- Durasi Menginap -->
+                    <input type="number" class="form-control mb-3" name="durasi" placeholder="Durasi Menginap" value="<?= htmlspecialchars($durasi) ?>" required>
+
+                    <!-- Checkbox Breakfast -->
                     <div class="mb-3">
-                        <label for="identitas" class="form-label">Nomor Identitas</label>
-                        <input type="text" class="form-control" name="identitas" required>
+                        <input class="form-check-input" type="checkbox" name="breakfast" <?= $breakfast ? 'checked' : '' ?>> Termasuk Breakfast
                     </div>
-                    <div class="mb-3">
-                        <label for="tipeKamar" class="form-label">Tipe Kamar</label>
-                        <select class="form-select" name="tipeKamar" required>
-                            <?php foreach ($rooms as $room): ?>
-                                <option value="<?= $room[0] ?>" <?= $room[0] === $rooms[$id][0] ? 'selected' : '' ?>>
-                                    <?= $room[0] ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="harga" class="form-label">Harga</label>
-                        <input type="text" class="form-control" name="harga" value="<?= $rooms[$id][1] ?>" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="tanggal" class="form-label">Tanggal Pesan</label>
-                        <input type="date" class="form-control" name="tanggal" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="durasi" class="form-label">Durasi Menginap</label>
-                        <input type="number" class="form-control" name="durasi" value="3" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Termasuk Breakfast</label><br>
-                        <input class="form-check-input" type="checkbox" name="breakfast" checked>
-                        <label class="form-check-label" for="breakfast">Ya</label>
-                    </div>
-                    <div class="mb-3">
-                        <label for="total" class="form-label">Total Bayar</label>
-                        <input type="text" class="form-control" id="total" value="" readonly>
-                    </div>
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-between">
-                        <button type="button" class="btn btn-secondary">Hitung Total Bayar</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                        <button type="reset" class="btn btn-danger">Cancel</button>
-                    </div>
+
+                    <!-- Total Bayar -->
+                    <input type="text" class="form-control mb-3" id="total" value="<?= $total_bayar ? number_format($total_bayar, 0, ',', '.') : '' ?>" placeholder="Total Bayar" readonly>
+
+                    <!-- Tombol Submit -->
+                    <button type="submit" class="btn btn-primary">Hitung Total</button>
+                    <button type="submit" formaction="hasil.php" class="btn btn-primary">Simpan</button>
+                    <button type="reset" class="btn btn-danger">Cancel</button>
                 </form>
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
