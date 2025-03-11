@@ -47,12 +47,12 @@ $rooms = [
     <!-- Banner Kamar (Carousel) -->
     <div id="bannerKamar" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
-            <?php foreach ($rooms as $index => $room) : ?>
+            <?php foreach ($rooms as $index => $room) { ?>
                 <button type="button" data-bs-target="#bannerKamar" data-bs-slide-to="<?= $index ?>" class="<?= $index === 0 ? 'active' : '' ?>" aria-label="Slide <?= $index + 1 ?>"></button>
-            <?php endforeach; ?>
+            <?php } ?>
         </div>
         <div class="carousel-inner">
-            <?php foreach ($rooms as $index => $room) : ?>
+            <?php foreach ($rooms as $index => $room) { ?>
                 <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
                     <img src="img/<?= $room[2] ?>" class="d-block w-100" alt="<?= $room[0] ?>">
                     <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 p-3 rounded">
@@ -60,7 +60,7 @@ $rooms = [
                         <p>Harga mulai dari Rp <?= number_format($room[1], 0, ',', '.') ?> per malam.</p>
                     </div>
                 </div>
-            <?php endforeach; ?>
+            <?php } ?>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#bannerKamar" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
